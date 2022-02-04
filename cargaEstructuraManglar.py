@@ -1,5 +1,7 @@
 from asyncio.windows_events import NULL
+from cmath import nan
 from datetime import datetime
+import math
 from tkinter.tix import ROW
 from numpy.core.numeric import NaN
 import random
@@ -73,7 +75,7 @@ def generarAGD_MUESTRAS():
     #muestras['ES_REPLICA'] = 1 #siempre es 1??
     print(muestras.info())
     print(muestras)
-    muestras.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestras).xlsx',index=False)
+    muestras.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx',index=False)
     
 # GENERAR MUESTREOS
 def generarAGD_MUESTREOS():
@@ -90,7 +92,8 @@ def generarAGD_MUESTREOS():
    # muestreos['FECHASIS'] = datetime.now().date() #no es necesario, dejar asignacion de la bd
     print(muestreos.info())
     print(muestreos)
-    muestreos.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
+    muestreos.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
+    #muestreos.to_excel('xlsxS/data/BD_2239_3-toUpload(muestreos).xlsx',index=False)
     
         
 # GENERAR MUESTRAS VARIABLES(ID_PARAMETRO ID_METODOLOGIA ID_UNIDAD_MEDIDA ID_MUESTRA ID_METODO VALOR QUALITY_FLAG PRECISION)
@@ -102,19 +105,20 @@ def generarAGD_MUESTRAS_VARIABLES():
 #     372	Circunferencia altura pecho	615	Cinta métrica
 #     263	Diametro altura pecho	614	Cinta diamétrica
 #     263	Diametro altura pecho	744	Forcípula
-    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx',nrows=1000)
+    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
     muestras_variables = pd.DataFrame(columns = ['ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','ID_MUESTRA','ID_METODO','VALOR','QUALITY_FLAG','PRECISION'])
     for i, row in bdEstructura.iterrows():
         id_muestraa = str(row['ID_MUESTRA'])
         # row['NEW'] = str(row['NEW'])
         #ID
-        if (row['ROTULO'] != ""):
+        if not(math.isnan(row['ROTULO'])):
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':249, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['ROTULO'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         
-        if (row['DAP'] != ""):
             #Diametro altura pecho ¿ID METODO? 614 o 633
+        if not(math.isnan(row['DAP'])):
+            # print(id_muestraa,row['DAP'])
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':263, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':10,'ID_MUESTRA':id_muestraa,'ID_METODO':614, 'VALOR':row['DAP'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
-        if (row['ALTURA'] != ""):
+        if not(math.isnan(row['ALTURA']) ):
             #Altura (m) ¿ID METODO? 633 estimacion visual o 47 clinometro
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':270, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':11,'ID_MUESTRA':id_muestraa,'ID_METODO':633, 'VALOR':row['ALTURA'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         
@@ -154,11 +158,13 @@ def generarAGD_MUESTRAS_VARIABLES():
             
             
         #TAG
-        if (row['TAG'] != ""):
+        if ((row['TAG']) != ""):
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':282, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['TAG'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
        
         #ESPECIE ¿ID METODO? 95(ICTPM (SAMP)) 629(Entrevista) 732(Observación directa)? **********************
-        if (row['ESPECIE'] != ""):
+        #if (row['ESPECIE'] != '' or not(row['ESPECIE'].isnull()) or not(len(str(row['ESPECIE']))) == 0):
+        if not(str(row['ESPECIE']) == 'nan' ):
+            print(len(str(row['ESPECIE'])),row['ESPECIE'])
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':585, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['ESPECIE'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         # if row['NEW']=='':
         #     print("New vacio")
@@ -170,7 +176,7 @@ def generarAGD_MUESTRAS_VARIABLES():
        
     print(muestras_variables.info())
     print(muestras_variables)
-    muestras_variables.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestras_variables).xlsx',index=False)
+    muestras_variables.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras_variables).xlsx',index=False)
     
 # GENERAR MUESTREOS PARAMETROS (ID_MUESTREO ID_PARAMETRO ID_METODOLOGIA ID_UNIDAD_MEDIDA VALOR) 
 # REEMPLAAZDO POR MUESTREOS PARAMETORS AREAS
@@ -186,7 +192,7 @@ def generarAGD_MUESTREOS_PARAMETROS():
     
     print(muestreos_parametros.info())
     print(muestreos_parametros)
-    # muestreos_parametros.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
+    muestreos_parametros.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
 
 # 860	Area	A
 # 901	Subparcelas muestreadas	SuPM
@@ -393,8 +399,8 @@ def generate_sqls():
 
 
 #alistarData()
-#generarAGD_MUESTRAS()
-#generarAGD_MUESTREOS()
+# generarAGD_MUESTRAS()
+# generarAGD_MUESTREOS()
 generarAGD_MUESTRAS_VARIABLES()
 # # generarAGD_MUESTREOS_PARAMETROS() #aca solo se registraba el parametro Area 
 # # ordenarAreas_parcelas()
