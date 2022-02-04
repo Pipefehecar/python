@@ -204,7 +204,7 @@ def generarAGD_MUESTREOS_PARAMETROS_AREAS(): #ACA CREAMOS LOS PARAMETROS DE LOS 
     bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
     #bdAREAS = pd.read_excel('xlsxS/BD_2239_3_areas-toUpload.xlsx')
     muestreos_parametros = pd.DataFrame(columns = ['ID_MUESTREO','ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','VALOR'])
-    areas_resumen = pd.read_excel('xlsxS/2239_3-toUpload/BD_2239_3-ToUpload(somedataa).xlsx')
+    areas_resumen = pd.read_excel('xlsxS/BD_2239_3-ToUpload(somedataa).xlsx')
     # muestreos_parametros = pd.read_excel('xlsxS/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx')
     
     result_bdEstructura = bdEstructura.drop_duplicates(subset=['ID_MUESTREO'])
@@ -226,7 +226,7 @@ def generarAGD_MUESTREOS_PARAMETROS_AREAS(): #ACA CREAMOS LOS PARAMETROS DE LOS 
         
         #print(muestreos_parametros.info())
         #print(muestreos_parametros)
-    muestreos_parametros.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
+    muestreos_parametros.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
     print(muestreos_parametros.info())
 # 860	Area	A
 # 901	Subparcelas muestreadas	SuPM
@@ -318,14 +318,14 @@ def ordenarAreas_parcelas():
             areas_resumen = areas_resumen.append(DATA, ignore_index=True)
     # areas_resumen = areas_resumen.append(DATA, ignore_index=True)
      
-    areas_resumen.to_excel('xlsxS/2239_3-toUpload/BD_2239_3-ToUpload(somedataa).xlsx',index=False)
+    areas_resumen.to_excel('xlsxS/BD_2239_3-ToUpload(somedataa).xlsx',index=False)
     
 def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSECTOS NO MUESTREADOS EN SU TOTALIDAD, LA INFORMACION DE LOS MUESTREADOS TOTAL O PARCIALMENTE ASIGNA EN LA FUNCION generarAGD_MUESTREOS_PARAMETROS_AREAS()
-    muestreos= pd.read_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos).xlsx')
+    muestreos= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx')
     muestreos['ID_MUESTREO'] = muestreos['ID_MUESTREO'].map(str)
-    muestras= pd.read_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestras).xlsx')
+    muestras= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx')
     muestras['ID_MUESTRA'] = muestras['ID_MUESTRA'].map(str)
-    muestreos_parametros= pd.read_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx')
+    muestreos_parametros= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx')
     # muestreos_parametros = pd.DataFrame(columns = ['ID_MUESTREO','ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','VALOR'])
     EEESTACIONES = {
         'Sevillano' : 40996,
@@ -336,7 +336,7 @@ def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSEC
         'Rinconada' : 44175,
         'Luna' : 49423
     }
-    areas_resumen = pd.read_excel('xlsxS/2239_3-toUpload/BD_2239_3-ToUpload(somedataa).xlsx')        
+    areas_resumen = pd.read_excel('xlsxS/BD_2239_3-ToUpload(somedataa).xlsx')        
     for i, row in areas_resumen.iterrows():#ITERAMOS LAS AREAS MONITOREADAS POR ESTACION-AÑO
       
         if row['NO_MONITOREADA'] == 5 or row['NO_MONTADA'] == 5:
@@ -361,9 +361,9 @@ def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSEC
     print(muestreos_parametros.info())
     print(muestreos_parametros)
     
-    muestras.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestras).xlsx',index=False)
-    muestreos.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
-    muestreos_parametros.to_excel('xlsxS/data/2239_3-toUpload/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
+    muestras.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx',index=False)
+    muestreos.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
+    muestreos_parametros.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
     # muestrasppp = muestrasppp.drop_duplicates(subset=['ID_MUESTREO'])
     # for i, row in muestrasppp.iterrows():
     #     muestreos = muestreos.append({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':2239,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30-12-{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN}, ignore_index=True)
@@ -398,11 +398,11 @@ def generate_sqls():
     
 
 
-#alistarData()
+# alistarData()
 # generarAGD_MUESTRAS()
 # generarAGD_MUESTREOS()
-generarAGD_MUESTRAS_VARIABLES()
+# generarAGD_MUESTRAS_VARIABLES()
 # # generarAGD_MUESTREOS_PARAMETROS() #aca solo se registraba el parametro Area 
-# # ordenarAreas_parcelas()
-# generarAGD_MUESTREOS_PARAMETROS_AREAS() #se asigna PLANTILLA, AREA, N_SUBPARCELAS
-# documentarNO_MUESTREADOS()
+ordenarAreas_parcelas()
+generarAGD_MUESTREOS_PARAMETROS_AREAS() #se asigna PLANTILLA, AREA, N_SUBPARCELAS
+documentarNO_MUESTREADOS()
