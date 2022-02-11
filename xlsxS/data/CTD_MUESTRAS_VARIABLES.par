@@ -1,0 +1,8 @@
+#--cd /u03/app/oracle/SQL_LOADER
+#--/u01/app/oracle/product/11.2.0.4/dbhome_1/bin/sqlldr parfile=CTD_MUESTRAS_VARIABLES.pr
+#separador decimal .
+CONTROL=CTD_MUESTRAS_VARIABLES.ctl
+USERID=datosdecampo/perdidosporaca@sci
+LOG=MUESTRAS_VARIABLES_ESTRUCTURA_SIGMA.log
+BAD=MUESTRAS_VARIABLES_ESTRUCTURA_SIGMA_ERROR.bad
+DATA=BD_2239_3-ToUpload(muestreos_parametrostbs).txt

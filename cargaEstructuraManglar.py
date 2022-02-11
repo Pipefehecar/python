@@ -398,10 +398,10 @@ def generate_sqls():
     
 
 
-# alistarData()
-# generarAGD_MUESTRAS()
-# generarAGD_MUESTREOS()
-# generarAGD_MUESTRAS_VARIABLES()
+alistarData()
+generarAGD_MUESTRAS()
+generarAGD_MUESTREOS()
+generarAGD_MUESTRAS_VARIABLES()
 # # generarAGD_MUESTREOS_PARAMETROS() #aca solo se registraba el parametro Area 
 ordenarAreas_parcelas()
 generarAGD_MUESTREOS_PARAMETROS_AREAS() #se asigna PLANTILLA, AREA, N_SUBPARCELAS
