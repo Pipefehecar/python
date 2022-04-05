@@ -9,7 +9,9 @@ import pandas as pd
 
 def alistarData():
     ###bdEstructura = pd.read_excel('xlsxS/BD_CGSM_ESTRUCTURA_LABSIS_2021.12.03.xlsx', sheet_name='BD_Estructura')
-    bdEstructura = pd.read_excel('xlsxS/ESTRUCTURA_2022.01.19_LABSIS.xlsx', sheet_name='BD_Estructura')
+    # bdEstructura = pd.read_excel('xlsxS/ESTRUCTURA_2022.01.19_LABSIS.xlsx', sheet_name='BD_Estructura')
+    bdEstructura = pd.read_excel('Prod/ESTRUCTURA_2022.01.19_LABSIS(28032022).xlsx', sheet_name='BD_Estructura')
+    # bdEstructura = pd.read_excel('registro-toUpload.xlsx')#nuevo registro
     bdEstructura.columns = [
     'IDENTIFICADOR','FECHA','AÑO',
     'ESTACION','CÓDIGO_ESTACION',
@@ -44,9 +46,9 @@ def alistarData():
     
     #generamos los id_muestreo
     bdEstructura['ROTULO'] = bdEstructura['ROTULO'].map(int)
-    print(bdEstructura.info())
-    bdEstructura['FECHA'] = bdEstructura['FECHA'].dt.strftime('%d/%m/%y')
     # bdEstructura['FECHA'] = bdEstructura['FECHA'].dt.date
+    bdEstructura['FECHA'] = bdEstructura['FECHA'].dt.strftime('%d/%m/%y')
+    print(bdEstructura.info())
     bdEstructura['ID_MUESTREO'] =bdEstructura['ID_ESTACION'] + bdEstructura['FECHA'].map(str).str.replace('/','') 
     bdEstructura['ID_MUESTRA'] = bdEstructura['ID_MUESTREO'] + bdEstructura['ROTULO'].map(str)
     bdEstructura['ALTURA'] = bdEstructura['ALTURA'].round(decimals=2)
@@ -63,11 +65,13 @@ def alistarData():
     
     print(bdEstructura.info())
     print(bdEstructura)
-    bdEstructura.to_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx',index=False)
+    # bdEstructura.to_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx',index=False)
+    bdEstructura.to_excel('Prod/BD_1513_3-toUpload(real).xlsx',index=False)#nuevo
 
 # GENERAR MUESTRAS
 def generarAGD_MUESTRAS():
-    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
+    bdEstructura = pd.read_excel('Prod/BD_1513_3-toUpload(real).xlsx')
+    # bdEstructura = pd.read_excel('registro-toUpload.xlsx')#nuevo registro
     muestras = pd.DataFrame(columns = ['ID_MUESTRA','ID_MUESTREO','NOTAS'])
     muestras['ID_MUESTRA'] = bdEstructura['ID_MUESTRA'].map(str)
     muestras['ID_MUESTREO'] = bdEstructura['ID_MUESTREO'].map(str)
@@ -75,11 +79,13 @@ def generarAGD_MUESTRAS():
     #muestras['ES_REPLICA'] = 1 #siempre es 1??
     print(muestras.info())
     print(muestras)
-    muestras.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx',index=False)
+    # muestras.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx',index=False)
+    muestras.to_excel('Prod/BD_1513_3-ToUpload(muestras).xlsx',index=False)#nuevo registro
     
 # GENERAR MUESTREOS
 def generarAGD_MUESTREOS():
-    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
+    bdEstructura = pd.read_excel('Prod/BD_1513_3-toUpload(real).xlsx')
+    # bdEstructura = pd.read_excel('registro-toUpload.xlsx')#nuevo registro
     muestreos = pd.DataFrame(columns = ['ID_MUESTREO','ID_ESTACION','ID_PROYECTO','ID_METODOLOGIA','ID_TEMATICAS','FECHA','NOTAS'])
     result_bdEstructura = bdEstructura.drop_duplicates(subset=['ID_MUESTREO'])
     muestreos['ID_MUESTREO'] = result_bdEstructura['ID_MUESTREO'].map(str)
@@ -92,8 +98,8 @@ def generarAGD_MUESTREOS():
    # muestreos['FECHASIS'] = datetime.now().date() #no es necesario, dejar asignacion de la bd
     print(muestreos.info())
     print(muestreos)
-    muestreos.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
-    #muestreos.to_excel('xlsxS/data/BD_2239_3-toUpload(muestreos).xlsx',index=False)
+    # muestreos.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
+    muestreos.to_excel('Prod/BD_1513_3-toUpload(muestreos).xlsx',index=False)
     
         
 # GENERAR MUESTRAS VARIABLES(ID_PARAMETRO ID_METODOLOGIA ID_UNIDAD_MEDIDA ID_MUESTRA ID_METODO VALOR QUALITY_FLAG PRECISION)
@@ -105,12 +111,13 @@ def generarAGD_MUESTRAS_VARIABLES():
 #     372	Circunferencia altura pecho	615	Cinta métrica
 #     263	Diametro altura pecho	614	Cinta diamétrica
 #     263	Diametro altura pecho	744	Forcípula
-    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
+    bdEstructura = pd.read_excel('Prod/BD_1513_3-toUpload(real).xlsx')
+    # bdEstructura = pd.read_excel('registro-toUpload.xlsx')#nuevo registro
     muestras_variables = pd.DataFrame(columns = ['ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','ID_MUESTRA','ID_METODO','VALOR','QUALITY_FLAG','PRECISION'])
     for i, row in bdEstructura.iterrows():
         id_muestraa = str(row['ID_MUESTRA'])
         # row['NEW'] = str(row['NEW'])
-        #ID
+        #ID, si tiene id
         if not(math.isnan(row['ROTULO'])):
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':249, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['ROTULO'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         
@@ -118,11 +125,12 @@ def generarAGD_MUESTRAS_VARIABLES():
         if not(math.isnan(row['DAP'])):
             # print(id_muestraa,row['DAP'])
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':263, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':10,'ID_MUESTRA':id_muestraa,'ID_METODO':614, 'VALOR':row['DAP'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
+        
         if not(math.isnan(row['ALTURA']) ):
             #Altura (m) ¿ID METODO? 633 estimacion visual o 47 clinometro
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':270, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':11,'ID_MUESTRA':id_muestraa,'ID_METODO':633, 'VALOR':row['ALTURA'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         
-        #Estado arbol valor = id_estado () AG_LOVE -> TABLA 1
+        #Estado arbol valor = id_estado () AG_LOV -> TABLA 1
         if (row['ESTADO'] != ""):
             if row['ESTADO'] == 'CA':
                 muestras_variables = muestras_variables.append({'ID_PARAMETRO':252, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':1,'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
@@ -164,10 +172,16 @@ def generarAGD_MUESTRAS_VARIABLES():
         #ESPECIE ¿ID METODO? 95(ICTPM (SAMP)) 629(Entrevista) 732(Observación directa)? **********************
         #if (row['ESPECIE'] != '' or not(row['ESPECIE'].isnull()) or not(len(str(row['ESPECIE']))) == 0):
         if not(str(row['ESPECIE']) == 'nan' ):
-            print(len(str(row['ESPECIE'])),row['ESPECIE'])
+            # print(len(str(row['ESPECIE'])),row['ESPECIE'])
             muestras_variables = muestras_variables.append({'ID_PARAMETRO':585, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['ESPECIE'],'QUALITY_FLAG':2,'PRECISION':NaN}, ignore_index=True)
         # if row['NEW']=='':
         #     print("New vacio")
+        
+        if (row['ESTADO'] != ""):
+            muestras_variables = muestras_variables.append({'ID_PARAMETRO':250, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['PARCELA'],'QUALITY_FLAG':2}, ignore_index=True)
+        
+        
+        
         if i % 100 == 0:
             print("muestra numero: ",i)
         # if i % 20000 == 0:
@@ -176,7 +190,8 @@ def generarAGD_MUESTRAS_VARIABLES():
        
     print(muestras_variables.info())
     print(muestras_variables)
-    muestras_variables.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras_variables).xlsx',index=False)
+    # muestras_variables.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras_variables).xlsx',index=False)
+    muestras_variables.to_excel('Prod/BD_1513_3-ToUpload(muestras_variables).xlsx',index=False)#nuevo registro
     
 # GENERAR MUESTREOS PARAMETROS (ID_MUESTREO ID_PARAMETRO ID_METODOLOGIA ID_UNIDAD_MEDIDA VALOR) 
 # REEMPLAAZDO POR MUESTREOS PARAMETORS AREAS
@@ -201,7 +216,7 @@ def generarAGD_MUESTREOS_PARAMETROS():
 
 # GENERAR MUESTREOS PARAMETROS (areas de parcelas)(ID_MUESTREO ID_PARAMETRO ID_METODOLOGIA ID_UNIDAD_MEDIDA VALOR)
 def generarAGD_MUESTREOS_PARAMETROS_AREAS(): #ACA CREAMOS LOS PARAMETROS DE LOS MUESTREOS, LOS MUESTREOS SON GENERADOS MAS ABAJO EN documentarNO_MUESTREADOS()
-    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
+    bdEstructura = pd.read_excel('Prod/BD_1513_3-toUpload(real).xlsx')
     #bdAREAS = pd.read_excel('xlsxS/BD_2239_3_areas-toUpload.xlsx')
     muestreos_parametros = pd.DataFrame(columns = ['ID_MUESTREO','ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','VALOR'])
     areas_resumen = pd.read_excel('xlsxS/BD_2239_3-ToUpload(somedataa).xlsx')
@@ -226,7 +241,7 @@ def generarAGD_MUESTREOS_PARAMETROS_AREAS(): #ACA CREAMOS LOS PARAMETROS DE LOS 
         
         #print(muestreos_parametros.info())
         #print(muestreos_parametros)
-    muestreos_parametros.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
+    muestreos_parametros.to_excel('Prod/BD_1513_3-ToUpload(muestreos_parametros).xlsx',index=False)
     print(muestreos_parametros.info())
 # 860	Area	A
 # 901	Subparcelas muestreadas	SuPM
@@ -321,11 +336,11 @@ def ordenarAreas_parcelas():
     areas_resumen.to_excel('xlsxS/BD_2239_3-ToUpload(somedataa).xlsx',index=False)
     
 def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSECTOS NO MUESTREADOS EN SU TOTALIDAD, LA INFORMACION DE LOS MUESTREADOS TOTAL O PARCIALMENTE ASIGNA EN LA FUNCION generarAGD_MUESTREOS_PARAMETROS_AREAS()
-    muestreos= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx')
+    muestreos= pd.read_excel('Prod/BD_1513_3-ToUpload(muestreos).xlsx')
     muestreos['ID_MUESTREO'] = muestreos['ID_MUESTREO'].map(str)
-    muestras= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx')
+    muestras= pd.read_excel('Prod/BD_1513_3-ToUpload(muestras).xlsx')
     muestras['ID_MUESTRA'] = muestras['ID_MUESTRA'].map(str)
-    muestreos_parametros= pd.read_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx')
+    muestreos_parametros= pd.read_excel('Prod/BD_1513_3-ToUpload(muestreos_parametros).xlsx')
     # muestreos_parametros = pd.DataFrame(columns = ['ID_MUESTREO','ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','VALOR'])
     EEESTACIONES = {
         'Sevillano' : 40996,
@@ -344,13 +359,14 @@ def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSEC
             ID_ESTACIONN = EEESTACIONES[row["ESTACION"][0:-3]]
             ID_MUESTREO = (f'{FECHA}{ID_ESTACIONN}')
             if not muestras['ID_MUESTRA'].str.contains((f'{ID_MUESTREO}{row["ID_ESTACION"]}'), regex=False).any() : 
+                #PARA ESTE CASO ID_ESTACION ES UN ID_PARCELA, QUEDANDO ENTONCES FECHA+ID_ESTACION+ID_PARCELA
                 muestras = muestras.append({'ID_MUESTRA':(f'{ID_MUESTREO}{row["ID_ESTACION"]}'), 'ID_MUESTREO':ID_MUESTREO,'NOTAS':(f'El Transecto {row["ESTACION"]} (id: {row["ID_ESTACION"]}) no fue monitoreado en el año {row["AÑO"]}'),'ES_REPLICA':1}, ignore_index=True)
                 print({'ID_MUESTRA':(f'{ID_MUESTREO}{row["ID_ESTACION"]}'), 'ID_MUESTREO':ID_MUESTREO,'NOTAS':(f'El Transecto {row["ESTACION"]} (id: {row["ID_ESTACION"]}) no fue monitoreado en el año {row["AÑO"]}'),'ES_REPLICA':1})
            
             if not muestreos['ID_MUESTREO'].str.contains(ID_MUESTREO, regex=False).any() :
                 
-                muestreos = muestreos.append({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':2239,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30-12-{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN}, ignore_index=True)
-                print({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':2239,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30-12-{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN})
+                muestreos = muestreos.append({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':1513,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30/12/{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN}, ignore_index=True)
+                print({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':1513,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30/12/{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN})
                 muestreos_parametros = muestreos_parametros.append({'ID_MUESTREO':ID_MUESTREO, 'ID_PARAMETRO':1170,'ID_METODOLOGIA':3, 'ID_UNIDAD_MEDIDA':100,'VALOR':'Datos rescatados de BD EXCEL con informacion historica de estructura de maglar (transectos no monitoreados)'}, ignore_index=True)
                 print({'ID_MUESTREO':ID_MUESTREO, 'ID_PARAMETRO':1170,'ID_METODOLOGIA':3, 'ID_UNIDAD_MEDIDA':100,'VALOR':'Datos rescatados de BD EXCEL con informacion historica de estructura de maglar (transectos no monitoreados)'})
               
@@ -361,9 +377,9 @@ def documentarNO_MUESTREADOS():#FUNCION PARA GENERAR REGISTROS SOBRE LOS TRANSEC
     print(muestreos_parametros.info())
     print(muestreos_parametros)
     
-    muestras.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras).xlsx',index=False)
-    muestreos.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos).xlsx',index=False)
-    muestreos_parametros.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestreos_parametros).xlsx',index=False)
+    muestras.to_excel('Prod/BD_1513_3-ToUpload(muestras).xlsx',index=False)
+    muestreos.to_excel('Prod/BD_1513_3-ToUpload(muestreos).xlsx',index=False)
+    muestreos_parametros.to_excel('Prod/BD_1513_3-ToUpload(muestreos_parametros).xlsx',index=False)
     # muestrasppp = muestrasppp.drop_duplicates(subset=['ID_MUESTREO'])
     # for i, row in muestrasppp.iterrows():
     #     muestreos = muestreos.append({'ID_MUESTREO':ID_MUESTREO, 'ID_ESTACION':row['ID_ESTACION'],'ID_PROYECTO':2239,'ID_METODOLOGIA':3,'ID_TEMATICAS':224, 'FECHA':(f'30-12-{row["AÑO"]}'),'NOTAS':'Muestreo generado para documentar monitoreos no realizados','FECHASIS':NaN}, ignore_index=True)
@@ -398,11 +414,38 @@ def generate_sqls():
     
 
 
-alistarData()
+def generar_muestreos_parametros_subparcelas():
+    bdEstructura = pd.read_excel('xlsxS/data/BD_2239_3-toUpload(real).xlsx')
+    muestras_variables = pd.DataFrame(columns = ['ID_PARAMETRO','ID_METODOLOGIA','ID_UNIDAD_MEDIDA','ID_MUESTRA','ID_METODO','VALOR','QUALITY_FLAG','PRECISION'])
+    for i, row in bdEstructura.iterrows():
+        id_muestraa = str(row['ID_MUESTRA'])
+        
+        if (row['ESTADO'] != ""):
+            muestras_variables = muestras_variables.append({'ID_PARAMETRO':250, 'ID_METODOLOGIA':3,'ID_UNIDAD_MEDIDA':100,'ID_MUESTRA':id_muestraa,'ID_METODO':732, 'VALOR':row['PARCELA'],'QUALITY_FLAG':2}, ignore_index=True)
+        
+        if i % 100 == 0:
+                print("muestra numero: ",i)
+                
+    print(muestras_variables.info())
+    print(muestras_variables)
+    muestras_variables.to_excel('xlsxS/data/BD_2239_3-ToUpload(muestras_variables_parcelas).xlsx',index=False)#nuevo registro
+# alistarData()
+# generarAGD_MUESTRAS()
+# generarAGD_MUESTREOS()
+# generarAGD_MUESTRAS_VARIABLES()
+# # generarAGD_MUESTREOS_PARAMETROS() #aca solo se registraba el parametro Area 
+# ordenarAreas_parcelas()
+# generarAGD_MUESTREOS_PARAMETROS_AREAS() #se asigna PLANTILLA, AREA, N_SUBPARCELAS
+# documentarNO_MUESTREADOS()
+
+# generar_muestreos_parametros_subparcelas()
+
+
+
+#correr para produccion
+# alistarData()
 generarAGD_MUESTRAS()
 generarAGD_MUESTREOS()
-generarAGD_MUESTRAS_VARIABLES()
-# # generarAGD_MUESTREOS_PARAMETROS() #aca solo se registraba el parametro Area 
-ordenarAreas_parcelas()
+# generarAGD_MUESTRAS_VARIABLES()
 generarAGD_MUESTREOS_PARAMETROS_AREAS() #se asigna PLANTILLA, AREA, N_SUBPARCELAS
 documentarNO_MUESTREADOS()

@@ -23,7 +23,7 @@ def igualarColumnas():#col deben tener el mismo nombre y los registros deben est
     excel.columns['FECHA','AÑO','IDENTIFICADOR','ESTACION','CÓDIGOESTACIÓN','TRANSECTO','PARCELA','ESPECIE','ROTULO_ARBOL_ID','TAG','ESTADO','ID_TIPO','NEW TAG o INDIV','ALTURA_METROS','DAP','CATEGORÍA DIAMÉTRICA','OBSERVACIONES','AB']
     bd.to_excel("sigmaEstructura_bd.xlsx", sheet_name='DATA_BD',index=False)
     excel.to_excel("sigmaEstructura_excel.xlsx", sheet_name='DATA_EXCEL',index=False)
-def armarIdentificador():
+# def armarIdentificador():
     
 
-importarDatos()
+# importarDatos()
